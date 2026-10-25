@@ -1,0 +1,829 @@
+/* Modern theme layer; loaded after viewer.css. */
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --spring: linear(0, 0.18 6%, 0.62 14%, 0.92 23%, 1.05 32%, 1.03 42%, 1 60%, 1);
+  --accent: #4f46e5;
+  --body-bg-color: #eceef2;
+  --toolbar-bg-color: rgb(255 255 255 / 0.72);
+  --sidebar-toolbar-bg-color: transparent;
+  --toolbar-border-color: rgb(15 23 42 / 0.08);
+  --toolbar-box-shadow: none;
+  --toolbarSidebar-box-shadow: none;
+  --toolbar-height: 48px;
+  --button-hover-color: rgb(15 23 42 / 0.06);
+  --toggled-btn-bg-color: rgb(79 70 229 / 0.12);
+  --toggled-btn-color: #4338ca;
+  --field-bg-color: rgb(255 255 255 / 0.9);
+  --field-border-color: rgb(15 23 42 / 0.14);
+  --doorhanger-bg-color: #fff;
+  --doorhanger-border-color: rgb(15 23 42 / 0.1);
+  --doorhanger-hover-bg-color: rgb(15 23 42 / 0.06);
+  --doorhanger-hover-color: var(--main-color);
+  --doorhanger-separator-color: rgb(15 23 42 / 0.1);
+  --dialog-button-bg-color: rgb(15 23 42 / 0.06);
+  --dialog-button-hover-bg-color: rgb(15 23 42 / 0.12);
+  --progressBar-color: var(--accent);
+  --toolbar-icon-opacity: 0.8;
+  --sidebar-width: 200px;
+  --sidebar-transition-duration: 320ms;
+  --sidebar-transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  --shadow-pop: 0 8px 30px rgb(0 0 0 / 0.18), 0 0 0 1px var(--toolbar-border-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.is-light) {
+    --accent: #818cf8;
+    --body-bg-color: #0b0b0f;
+    --toolbar-bg-color: rgb(24 24 30 / 0.72);
+    --toolbar-border-color: rgb(255 255 255 / 0.08);
+    --button-hover-color: rgb(255 255 255 / 0.08);
+    --toggled-btn-bg-color: rgb(129 140 248 / 0.18);
+    --toggled-btn-color: #c7d2fe;
+    --field-bg-color: rgb(255 255 255 / 0.06);
+    --field-border-color: rgb(255 255 255 / 0.14);
+    --doorhanger-bg-color: #18181f;
+    --doorhanger-border-color: rgb(255 255 255 / 0.1);
+    --doorhanger-hover-bg-color: rgb(255 255 255 / 0.08);
+    --doorhanger-separator-color: rgb(255 255 255 / 0.1);
+    --dialog-button-bg-color: rgb(255 255 255 / 0.08);
+    --dialog-button-hover-bg-color: rgb(255 255 255 / 0.16);
+  }
+}
+:root.is-dark {
+  --accent: #818cf8;
+  --body-bg-color: #0b0b0f;
+  --toolbar-bg-color: rgb(24 24 30 / 0.72);
+  --toolbar-border-color: rgb(255 255 255 / 0.08);
+  --button-hover-color: rgb(255 255 255 / 0.08);
+  --toggled-btn-bg-color: rgb(129 140 248 / 0.18);
+  --toggled-btn-color: #c7d2fe;
+  --field-bg-color: rgb(255 255 255 / 0.06);
+  --field-border-color: rgb(255 255 255 / 0.14);
+  --doorhanger-bg-color: #18181f;
+  --doorhanger-border-color: rgb(255 255 255 / 0.1);
+  --doorhanger-hover-bg-color: rgb(255 255 255 / 0.08);
+  --doorhanger-separator-color: rgb(255 255 255 / 0.1);
+  --dialog-button-bg-color: rgb(255 255 255 / 0.08);
+  --dialog-button-hover-bg-color: rgb(255 255 255 / 0.16);
+}
+
+body, #sidebarContainer, .doorHanger, .doorHangerRight, #secondaryToolbar, #findbar,
+dialog, .toolbarField, select {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, sans-serif;
+}
+
+/* Toolbar */
+.toolbar, #toolbarContainer {
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+#toolbarContainer {
+  border-bottom: 1px solid var(--toolbar-border-color);
+}
+
+.toolbarButton, .dropdownToolbarButton {
+  position: relative;
+  overflow: hidden;
+  width: 34px;
+  height: 34px;
+  margin: 7px 2px;
+  border-radius: var(--radius-sm);
+}
+.toolbarButton:hover, .dropdownToolbarButton:hover {
+  background-color: var(--button-hover-color);
+}
+.toolbarButton::before { top: 9px; left: 9px; }
+.dropdownToolbarButton::after { top: 9px; inset-inline-end: 10px; }
+.dropdownToolbarButton { min-width: 132px; }
+.dropdownToolbarButton > select { height: 34px; border-radius: var(--radius-sm); }
+.toolbarButton.toggled {
+  background-color: var(--toggled-btn-bg-color);
+  color: var(--toggled-btn-color);
+  outline: none;
+}
+.toolbarButton.labeled { border-radius: 8px; width: auto; }
+
+.splitToolbarButton {
+  position: relative;
+  margin: 7px 2px;
+  padding: 2px;
+  background: var(--button-hover-color);
+  border-radius: 10px;
+}
+.splitToolbarButton > .toolbarButton {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+.splitToolbarButton > .toolbarButton::before { top: 7px; left: 7px; }
+.splitToolbarButtonSeparator, .verticalToolbarSeparator {
+  height: 16px;
+  margin: 12px 2px;
+  opacity: 0.5;
+}
+.splitToolbarButton.toggled > .toolbarButton.toggled {
+  background: var(--doorhanger-bg-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+}
+/* sliding pill supplies the raised segment in these groups */
+:is(#sidebarViewButtons, #editorModeButtons) > .toolbarButton.toggled {
+  background: transparent;
+  box-shadow: none;
+}
+.seg-pill {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 8px;
+  background: var(--doorhanger-bg-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+}
+.ink {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.toolbarField {
+  border-radius: var(--radius-sm);
+  margin: 7px 0;
+  padding: 6px 9px;
+}
+.toolbarField:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.toolbar.scrolled { box-shadow: 0 4px 20px rgb(0 0 0 / 0.08); }
+
+/* Popovers */
+#secondaryToolbar, #findbar, .editorParamsToolbar {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--doorhanger-border-color);
+  box-shadow: var(--shadow-pop);
+  top: calc(var(--toolbar-height) + 6px);
+}
+:is(.doorHanger, .doorHangerRight)::before,
+:is(.doorHanger, .doorHangerRight)::after { display: none; }
+#secondaryToolbar { margin: 0 8px; padding: 6px; }
+#findbar { inset-inline-start: 12px; }
+
+/* Sidebar */
+#sidebarContainer {
+  border-top: none;
+  border-inline-end: 1px solid var(--toolbar-border-color);
+  background: var(--toolbar-bg-color);
+  backdrop-filter: blur(20px);
+}
+#toolbarSidebar { height: var(--toolbar-height); }
+.thumbnail {
+  border-radius: 6px;
+}
+.thumbnailImage {
+  border-radius: 6px;
+}
+.thumbnail:hover > .thumbnailImage {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.2);
+}
+.thumbnail.selected > .thumbnailImage {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Pages */
+.pdfViewer .page {
+  border: none !important;
+  border-image: none !important;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 10px 30px rgb(0 0 0 / 0.12);
+  margin: 12px auto;
+}
+
+/* Loading bar */
+#loadingBar {
+  height: 2px;
+  background: transparent;
+  border-bottom: none;
+  bottom: 0;
+  top: auto;
+}
+#loadingBar .progress {
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+}
+
+/* Dialogs */
+dialog {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  border: 1px solid var(--doorhanger-border-color);
+}
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.4);
+  backdrop-filter: blur(4px);
+}
+.dialogButton { border-radius: 8px; padding: 6px 14px; }
+
+#viewerContainer, #sidebarContent { scrollbar-width: thin; }
+
+/* Page island */
+#pageIsland {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 8px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--toolbar-bg-color);
+  backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid var(--toolbar-border-color);
+  box-shadow: var(--shadow-pop);
+  color: var(--main-color, inherit);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10000;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .toolbarButton, .dropdownToolbarButton {
+    transition: background-color 0.15s, transform 0.25s var(--spring);
+  }
+  .toolbarButton:active, .dropdownToolbarButton:active { transform: scale(0.92); }
+  .toolbarField { transition: box-shadow 0.15s, border-color 0.15s; }
+  .thumbnailImage { transition: transform 0.25s var(--spring), box-shadow 0.2s; }
+  .toolbar { transition: box-shadow 0.2s; }
+  #secondaryToolbar:not(.hidden), #findbar:not(.hidden), .editorParamsToolbar:not(.hidden) {
+    animation: pop-in 0.28s var(--spring);
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+@media (forced-colors: active) {
+  .toolbar, #toolbarContainer, #secondaryToolbar, #findbar, #sidebarContainer, #pageIsland {
+    backdrop-filter: none;
+    background: Canvas;
+  }
+}
+
+#viewThumbnail { overflow: visible; }
+
+/* Layout fixes: groups were inline-block with floats (line-height gaps) */
+.splitToolbarButton {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: top;
+  box-sizing: border-box;
+  height: 34px;
+  width: auto;
+}
+.splitToolbarButton > .toolbarButton { float: none; flex: none; }
+.splitToolbarButtonSeparator { float: none; margin: 0 2px; }
+#toolbarSidebar .splitToolbarButton { margin: 7px 8px; }
+#toolbarSidebar .splitToolbarButton > .toolbarButton { margin-inline-end: 0; }
+.dropdownToolbarButton { width: 150px; min-width: 150px; }
+.dropdownToolbarButton > select { width: 100%; padding-inline: 10px 28px; }
+.toolbarLabel { margin: 7px 2px; padding: 7px 4px; line-height: 20px; border-radius: var(--radius-sm); }
+#pageNumber { height: 34px; box-sizing: border-box; margin: 7px 0; }
+.seg-pill { top: 2px; left: 2px; }
+
+/* viewer.css `#toolbar…Left *{position:relative;float:left}` hit our injected nodes */
+:is(#toolbarSidebarLeft, #toolbarSidebarRight, #toolbarViewerLeft, #toolbarViewerMiddle, #toolbarViewerRight) :is(.seg-pill, .ink) {
+  position: absolute;
+  float: none;
+}
+
+/* Zoom dropdown popup */
+.dropdownToolbarButton > select option {
+  background: var(--doorhanger-bg-color);
+  color: var(--main-color, inherit);
+}
+@supports (appearance: base-select) {
+  .dropdownToolbarButton > select,
+  .dropdownToolbarButton > select::picker(select) {
+    appearance: base-select;
+  }
+  .dropdownToolbarButton > select::picker-icon { display: none; }
+  .dropdownToolbarButton > select::picker(select) {
+    margin-top: 6px;
+    padding: 6px;
+    min-width: anchor-size(width);
+    border: 1px solid var(--doorhanger-border-color);
+    border-radius: var(--radius-md);
+    background: var(--doorhanger-bg-color);
+    box-shadow: var(--shadow-pop);
+    scrollbar-width: thin;
+    max-height: min(70vh, 420px);
+  }
+  .dropdownToolbarButton > select option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .dropdownToolbarButton > select option:hover,
+  .dropdownToolbarButton > select option:focus-visible {
+    background: var(--doorhanger-hover-bg-color);
+    outline: none;
+  }
+  .dropdownToolbarButton > select option:checked {
+    background: var(--toggled-btn-bg-color);
+    color: var(--toggled-btn-color);
+    font-weight: 600;
+  }
+  .dropdownToolbarButton > select option::checkmark { order: 1; margin-inline-start: auto; }
+  @media (prefers-reduced-motion: no-preference) {
+    .dropdownToolbarButton > select::picker(select) {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+      transition: opacity 0.2s, transform 0.28s var(--spring), overlay 0.28s allow-discrete, display 0.28s allow-discrete;
+    }
+    .dropdownToolbarButton > select::picker(select):popover-open {
+      opacity: 1;
+      transform: none;
+    }
+    @starting-style {
+      .dropdownToolbarButton > select::picker(select):popover-open {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.96);
+      }
+    }
+  }
+}
+
+/* zoom dropdown: single-line label, popup fits without scrolling */
+.dropdownToolbarButton > select {
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 20px;
+  padding-block: 0;
+}
+@supports (appearance: base-select) {
+  .dropdownToolbarButton > select::picker(select) {
+    max-height: calc(100vh - var(--toolbar-height) - 24px);
+    padding: 4px;
+  }
+  .dropdownToolbarButton > select option {
+    padding: 4px 10px;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+}
+
+.dropdownToolbarButton > select {
+  box-sizing: border-box;
+  height: 34px;
+  padding-block: 0;
+}
+@supports (appearance: base-select) {
+  .dropdownToolbarButton > select {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ===== Vertical rail toolbar ===== */
+:root { --rail-width: 64px; }
+
+.toolbar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--rail-width);
+  backdrop-filter: none;
+}
+.toolbar.scrolled { box-shadow: none; }
+#toolbarContainer {
+  height: 100%;
+  width: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+#toolbarViewer {
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-start: 8px;
+  width: 48px;
+  height: auto;
+  box-sizing: border-box;
+  padding: 6px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  border-radius: var(--radius-lg);
+  background: var(--toolbar-bg-color);
+  border: 1px solid var(--toolbar-border-color);
+  box-shadow: var(--shadow-pop);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+#toolbarViewer::-webkit-scrollbar { display: none; }
+#toolbarViewer :is(#toolbarViewerLeft, #toolbarViewerMiddle, #toolbarViewerRight) {
+  float: none;
+  position: static;
+  left: auto;
+  transform: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+#toolbarViewer #toolbarViewerMiddle { order: 2; }
+#toolbarViewer #toolbarViewerRight { order: 3; }
+#toolbarViewer :is(#toolbarViewerLeft, #toolbarViewerMiddle, #toolbarViewerRight) > * {
+  float: none;
+}
+.toolbar .toolbarButton,
+.toolbar .toolbarField,
+.toolbar .toolbarLabel { margin: 0; }
+.toolbar .toolbarButtonSpacer { display: none; }
+.toolbar .splitToolbarButton {
+  flex-direction: column;
+  width: 34px;
+  height: auto;
+  margin: 0;
+}
+.toolbar .splitToolbarButtonSeparator {
+  width: 16px;
+  height: 1px;
+  margin: 2px 0;
+  background: var(--toolbar-border-color);
+}
+.toolbar .verticalToolbarSeparator {
+  width: 20px;
+  height: 1px;
+  margin: 2px 0;
+  background: var(--toolbar-border-color);
+  opacity: 1;
+}
+/* viewer.css hides parts of the toolbar at narrow widths; the rail has room */
+.toolbar .hiddenSmallView { display: inline-flex !important; }
+.toolbar .hiddenSmallView > * { display: block !important; }
+#outerContainer .toolbar .hiddenMediumView { display: inline-block !important; }
+.toolbar .verticalToolbarSeparator.hiddenMediumView { display: block !important; }
+.toolbar #scaleSelectContainer { display: block !important; }
+.toolbar .loadingInput { display: block; margin: 0; }
+.toolbar #pageNumber {
+  width: 38px;
+  height: 30px;
+  margin: 0;
+  padding: 0 4px;
+  text-align: center;
+}
+.toolbar .toolbarLabel,
+.toolbar #numPages.toolbarLabel {
+  min-width: 0;
+  padding: 0;
+  font-size: 11px;
+  line-height: 14px;
+  text-align: center;
+}
+
+/* zoom: icon + short label, options open to the right */
+.toolbar .dropdownToolbarButton {
+  width: 38px;
+  min-width: 38px;
+  height: 46px;
+  margin: 0;
+  padding: 0;
+}
+.toolbar .dropdownToolbarButton::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 11px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--main-color);
+  opacity: 0.8;
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='m20 20-4.9-4.9M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='m20 20-4.9-4.9M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.toolbar .dropdownToolbarButton::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: auto 0 5px 0;
+  width: auto;
+  height: auto;
+  top: auto;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  color: var(--main-color);
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+.toolbar .dropdownToolbarButton > select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  color: transparent;
+  cursor: pointer;
+}
+@supports (appearance: base-select) {
+  .toolbar .dropdownToolbarButton > select::picker(select) {
+    position-area: right span-all;
+    align-self: center;
+    margin: 0;
+    margin-inline-start: 10px;
+    max-height: calc(100vh - 24px);
+  }
+}
+
+/* popovers sit beside the rail */
+#secondaryToolbar {
+  inset-inline: calc(var(--rail-width) + 4px) auto;
+  top: auto;
+  bottom: 12px;
+  margin: 0;
+  max-height: calc(100% - 24px);
+  overflow: auto;
+}
+#findbar {
+  inset-inline-start: calc(var(--rail-width) + 4px);
+  top: 12px;
+}
+.editorParamsToolbar {
+  inset-inline: calc(var(--rail-width) + 4px) auto;
+  top: 12px;
+  margin: 0;
+}
+
+/* layout: rail on the far left, sidebar beside it, document after both */
+#sidebarContainer { inset-block: 0; }
+#outerContainer.sidebarOpen #sidebarContainer { inset-inline-start: var(--rail-width); }
+#viewerContainer { inset: 0; inset-inline-start: var(--rail-width); }
+#outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
+  inset-inline-start: calc(var(--rail-width) + var(--sidebar-width));
+}
+@media all and (max-width: 840px) {
+  #outerContainer.sidebarOpen #viewerContainer { inset-inline-start: var(--rail-width) !important; }
+}
+#viewerContainer.pdfPresentationMode:fullscreen { inset-inline-start: 0; }
+#loadingBar,
+#outerContainer.sidebarOpen #loadingBar {
+  position: fixed;
+  inset-block: 0 auto;
+  inset-inline: var(--rail-width) 0;
+  bottom: auto;
+}
+#pageIsland { left: calc(50% + var(--rail-width) / 2); }
+
+.toolbar .dropdownToolbarButton { background: transparent; }
+.toolbar .dropdownToolbarButton:hover { background: var(--button-hover-color); }
+.toolbar .dropdownToolbarButton > select { background: transparent; }
+.toolbar .dropdownToolbarButton::before,
+.toolbar .dropdownToolbarButton::after { z-index: 1; }
+
+/* thumbnails: selected looks lifted + glowing, hover previews it */
+.thumbnail { border-color: transparent; border-radius: 10px; }
+.thumbnail:hover,
+a:focus > .thumbnail {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--button-hover-color);
+}
+.thumbnail:hover > .thumbnailImage { opacity: 1; }
+.thumbnail.selected {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent) !important;
+  background: var(--toggled-btn-bg-color);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
+              0 10px 28px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.thumbnail.selected > .thumbnailImage {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.35);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .thumbnail { transition: background-color 0.2s, border-color 0.2s, box-shadow 0.25s; }
+  .thumbnailImage { transition: transform 0.3s var(--spring), box-shadow 0.25s; }
+}
+
+/* thumbnails: plain raised cards with a thin outline */
+.thumbnail,
+.thumbnail:hover,
+a:focus > .thumbnail,
+.thumbnail.selected {
+  background: none;
+  border-color: transparent !important;
+  box-shadow: none;
+}
+.thumbnailImage,
+.thumbnail:hover > .thumbnailImage,
+.thumbnail.selected > .thumbnailImage {
+  transform: none;
+  border-radius: 6px;
+  opacity: 1;
+  outline: 1px solid var(--toolbar-border-color);
+  outline-offset: 0;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 4px 10px rgb(0 0 0 / 0.18);
+}
+.thumbnail:hover > .thumbnailImage {
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 18px rgb(0 0 0 / 0.25);
+}
+.thumbnail.selected > .thumbnailImage {
+  outline: 2px solid var(--accent);
+}
+
+/* sidebar: floating rounded, raised panel beside the rail */
+#sidebarContainer {
+  inset-block: 8px;
+  inset-inline-start: calc(-1 * (var(--sidebar-width) + 24px));
+  border: 1px solid var(--toolbar-border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+}
+#outerContainer.sidebarOpen #sidebarContainer { inset-inline-start: var(--rail-width); }
+#outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
+  inset-inline-start: calc(var(--rail-width) + var(--sidebar-width) + 8px);
+}
+
+/* sidebar: hover-peek overlay. pdf.js keeps it "open" (so thumbnails render);
+   we hide it off-screen and reveal on hover/pin (see modern.js). */
+#outerContainer #sidebarContainer,
+#outerContainer.sidebarOpen #sidebarContainer {
+  inset-inline-start: calc(-1 * (var(--sidebar-width) + 24px));
+  visibility: hidden;
+  transition-property: inset-inline-start, visibility;
+  transition-duration: var(--sidebar-transition-duration), 0s;
+  transition-delay: 0s, var(--sidebar-transition-duration);
+}
+#outerContainer.sidebarPeek #sidebarContainer,
+#outerContainer.sidebarPinned #sidebarContainer {
+  inset-inline-start: var(--rail-width);
+  visibility: visible;
+  transition-delay: 0s, 0s;
+}
+#outerContainer #viewerContainer:not(.pdfPresentationMode),
+#outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
+  inset-inline-start: var(--rail-width);
+}
+@media all and (max-width: 840px) {
+  #outerContainer.sidebarOpen #viewerContainer { inset-inline-start: var(--rail-width) !important; }
+}
+
+/* find bar: top-right of the window */
+#findbar {
+  inset-inline-start: auto;
+  inset-inline-end: 12px;
+  top: 12px;
+  max-width: calc(100% - var(--rail-width) - 24px);
+}
+
+/* rail page indicator sizing */
+.toolbar #pageNumber {
+  box-sizing: border-box;
+  width: 36px;
+  height: 28px;
+  padding: 0 2px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 500;
+  text-align: center;
+  border-radius: var(--radius-sm);
+}
+.toolbar #numPages.toolbarLabel {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+  opacity: 0.7;
+}
+
+/* find bar: fully opaque */
+#findbar {
+  background-color: var(--doorhanger-bg-color);
+  backdrop-filter: none;
+  opacity: 1;
+}
+
+/* editor option panels: compact, next to the editing buttons */
+#editorStampParamsToolbar,
+#editorInkParamsToolbar,
+#editorFreeTextParamsToolbar,
+#editorHighlightParamsToolbar,
+.editorParamsToolbar {
+  inset-inline-start: calc(var(--rail-width) + 4px);
+  inset-inline-end: auto;
+  top: auto;
+  bottom: 90px;
+  width: max-content;
+  max-width: 260px;
+  padding: 4px 0;
+}
+
+/* every popover: hug its content, sit beside the rail */
+#secondaryToolbar,
+#findbar,
+.editorParamsToolbar {
+  width: max-content;
+  height: auto;
+}
+#secondaryToolbar {
+  inset-inline-start: calc(var(--rail-width) + 4px);
+  inset-inline-end: auto;
+  max-width: 260px;
+  padding: 4px 0;
+}
+#findbar { max-width: calc(100% - var(--rail-width) - 24px); }
+
+/* one font stack everywhere (viewer.css forces `font: message-box` on controls) */
+:is(.toolbar, .editorParamsToolbar, #secondaryToolbar, #findbar, #sidebarContainer, dialog, .doorHanger, .doorHangerRight),
+:is(.toolbar, .editorParamsToolbar, #secondaryToolbar, #findbar, #sidebarContainer, dialog, .doorHanger, .doorHangerRight) * {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, sans-serif !important;
+}
+
+/* find bar: frosted glass, same as the sidebar panel */
+#findbar {
+  background-color: var(--toolbar-bg-color);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+@media (forced-colors: active) {
+  #findbar { backdrop-filter: none; background: Canvas; }
+}
+
+/* ===== extra motion ===== */
+@media (prefers-reduced-motion: no-preference) {
+  /* rail slides in, its groups stagger up */
+  #toolbarViewer { animation: rail-in 0.5s var(--spring) both; }
+  #toolbarViewer > * { animation: item-in 0.45s var(--spring) both; }
+  #toolbarViewerLeft { animation-delay: 0.08s; }
+  #toolbarViewerMiddle { animation-delay: 0.16s; }
+  #toolbarViewerRight { animation-delay: 0.24s; }
+  @keyframes rail-in {
+    from { opacity: 0; transform: translateX(-16px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes item-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* icons nudge on hover */
+  .toolbarButton::before { transition: transform 0.25s var(--spring); }
+  .toolbarButton:not([disabled]):hover::before { transform: scale(1.15); }
+  .toolbarButton:not([disabled]):active::before { transform: scale(0.9); }
+
+  /* pages and thumbnails fade in as they appear */
+  .pdfViewer .page { animation: fade-in 0.45s ease-out both; }
+  .thumbnail { animation: thumb-in 0.4s var(--spring) both; }
+  #thumbnailView > a:nth-child(2) > .thumbnail { animation-delay: 0.04s; }
+  #thumbnailView > a:nth-child(3) > .thumbnail { animation-delay: 0.08s; }
+  #thumbnailView > a:nth-child(4) > .thumbnail { animation-delay: 0.12s; }
+  #thumbnailView > a:nth-child(n+5) > .thumbnail { animation-delay: 0.16s; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes thumb-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* sidebar tabs and view content cross-fade */
+  #sidebarContent > :not(.hidden) { animation: fade-in 0.25s ease-out both; }
+
+  /* dialogs */
+  dialog[open] { animation: pop-in 0.28s var(--spring); }
+  dialog[open]::backdrop { animation: fade-in 0.25s ease-out; }
+
+  /* menu rows slide in */
+  #secondaryToolbar:not(.hidden) .toolbarButton.labeled {
+    animation: item-in 0.35s var(--spring) both;
+  }
+  #secondaryToolbar:not(.hidden) .toolbarButton.labeled:nth-child(n+4) { animation-delay: 0.04s; }
+  #secondaryToolbar:not(.hidden) .toolbarButton.labeled:nth-child(n+8) { animation-delay: 0.08s; }
+
+  /* find bar field focus + loading progress shimmer */
+  #loadingBar .progress { transition: transform 0.3s var(--spring); }
+}
